@@ -100,8 +100,9 @@ while 1:
     incoming_message = incoming_message.decode() 
     print(' Client : ', incoming_message) 
     print()
+```
 
-
+```
 client.py
 
 import socket 
