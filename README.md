@@ -77,51 +77,53 @@ Client-server chat applications are foundational to real-time communication over
 ```
 server.py
 
-import socket
+import socket 
+s = socket.socket() 
+host = socket.gethostname() 
+print(' Server will start on host : ', host) 
+port = 8080 
+s.bind((host, port)) 
+print() 
+print('Waiting for connection') 
+print() 
+s.listen(1) 
+conn, addr = s.accept() 
+print(addr, ' Has connected to the server') 
+print() 
+while 1: 
+    message = input(str('>> ')) 
+    message = message.encode() 
+    conn.send(message) 
+    print('Sent') 
+    print() 
+    incoming_message = conn.recv(1024) 
+    incoming_message = incoming_message.decode() 
+    print(' Client : ', incoming_message) 
+    print()
 
-# Server setup
-host = '127.0.0.1'   # Localhost
-port = 5000          # Port number
-
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.bind((host, port))
-server_socket.listen(1)
-
-print("Server is listening on", host, ":", port)
-conn, addr = server_socket.accept()
-print("Connection from:", addr)
-
-while True:
-    data = conn.recv(1024).decode()
-    if not data:
-        break
-    print("Client:", data)
-    message = input("Server: ")
-    conn.send(message.encode())
-
-conn.close()
 
 client.py
 
-import socket
+import socket 
+s = socket.socket() 
+host = input(str('Enter hostname or host IP : ')) 
+port = 8080 
+s.connect((host, port)) 
+print('Connected to chat server') 
+while 1: 
+    incoming_message = s.recv(1024) 
+    incoming_message = incoming_message.decode() 
+    print(' Server : ', incoming_message) 
+    print() 
+    message = input(str('>> ')) 
+    message = message.encode() 
+    s.send(message) 
+    print('Sent') 
+    print() 
 
-# Client setup
-host = '127.0.0.1'   # Same as server
-port = 5000
-
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect((host, port))
-
-while True:
-    message = input("Client: ")
-    client_socket.send(message.encode())
-    data = client_socket.recv(1024).decode()
-    print("Server:", data)
-
-client_socket.close()
 ```
 ## Output:
-<img width="1358" height="330" alt="image" src="https://github.com/user-attachments/assets/6f110325-37b5-49e6-b6c3-d9ae3526a279" />
+<img width="1920" height="1200" alt="Screenshot (84)" src="https://github.com/user-attachments/assets/51b065d0-2854-4928-94e8-ebcc2a763b9e" />
 
 ## Result:
 
